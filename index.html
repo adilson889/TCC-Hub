@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCC Hub</title>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         /* ===== PRETO E BRANCO - DESIGN SYSTEM ===== */
         * {
@@ -79,6 +81,17 @@
             border-bottom: 2px solid var(--black);
         }
 
+        /* GOOGLE BUTTON */
+        .g_id_signin {
+            display: inline-block;
+        }
+        
+        .google-button-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
         /* SEÇÕES */
         .section {
             display: none;
@@ -101,7 +114,8 @@
             border: 1px solid var(--gray-300);
             padding: 20px;
             transition: all 0.2s;
-        }border-radius: 15px;
+            border-radius: 15px;
+        }
 
         .card:hover {
             border-color: var(--black);
@@ -115,6 +129,7 @@
             background: var(--white);
             padding: 40px;
             border: 1px solid var(--gray-300);
+            border-radius: 15px;
         }
 
         .form-group {
@@ -133,14 +148,13 @@
             border: 1px solid var(--gray-400);
             background: var(--white);
             font-family: inherit;
-			border-radius: 15px;
+            border-radius: 15px;
         }
 
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--black);
-			border-radius: 15px;
-			
+            border-radius: 15px;
         }
 
         /* BOTÕES */
@@ -155,7 +169,7 @@
             transition: all 0.2s;
             text-decoration: none;
             font-size: 16px;
-			border-radius: 15px;
+            border-radius: 15px;
         }
 
         .btn:hover {
@@ -167,11 +181,32 @@
             width: 100%;
         }
 
+        .btn-google {
+            background: white;
+            border: 2px solid #4285f4;
+            color: #4285f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-google:hover {
+            background: #4285f4;
+            color: white;
+        }
+
+        .btn-google img {
+            width: 20px;
+            height: 20px;
+        }
+
         /* PERFIL */
         .perfil-header {
             background: var(--white);
             padding: 30px;
             border: 1px solid var(--gray-300);
+            border-radius: 15px;
             display: flex;
             gap: 30px;
             align-items: center;
@@ -189,6 +224,13 @@
             font-size: 48px;
             font-weight: bold;
             text-transform: uppercase;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* TABS */
@@ -198,6 +240,7 @@
             margin: 30px 0 20px;
             border-bottom: 1px solid var(--gray-300);
             padding-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         .tab {
@@ -205,6 +248,7 @@
             cursor: pointer;
             border: 1px solid var(--gray-300);
             background: var(--white);
+            border-radius: 15px;
         }
 
         .tab.active {
@@ -246,9 +290,10 @@
                 <h2 class="text-center mb-2">Compartilhe seu conhecimento e receba avaliações de quem entende do assunto</h2>
                 <p class="text-center mb-2" style="color: var(--gray-600);">Faça login para continuar</p>
                 
+                <!-- Login tradicional (opcional, pode remover se quiser só Google) -->
                 <form id="form-login">
                     <div class="form-group">
-                        <label>Emaill</label>
+                        <label>Email</label>
                         <input type="email" id="login-email" placeholder="seu@email.edu" required>
                     </div>
                     
@@ -258,12 +303,36 @@
                     </div>
                     
                     <button type="submit" class="btn btn-block">Entrar</button>
-                    
-                    <p class="text-center" style="margin-top: 20px;">
-                        Não tem conta? 
-                        <span onclick="mostrarCadastro()" class="underline pointer">Cadastre-se</span>
-                    </p>
                 </form>
+
+                <div class="text-center" style="margin: 20px 0; position: relative;">
+                    <span style="background: white; padding: 0 10px; color: var(--gray-600);">ou</span>
+                    <hr style="border: none; border-top: 1px solid var(--gray-300); margin: -10px 0 20px;">
+                </div>
+
+                <!-- Botão do Google -->
+                <div class="google-button-container">
+                    <div id="g_id_onload"
+                        data-client_id="YOUR_GOOGLE_CLIENT_ID" 
+                        data-context="signin"
+                        data-ux_mode="popup"
+                        data-callback="handleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="rectangular"
+                        data-theme="outline"
+                        data-text="signin_with"
+                        data-size="large"
+                        data-logo_alignment="left">
+                    </div>
+                </div>
+                
+                <p class="text-center" style="margin-top: 20px;">
+                    Não tem conta? 
+                    <span onclick="mostrarCadastro()" class="underline pointer">Cadastre-se</span>
+                </p>
             </div>
         </section>
 
@@ -275,7 +344,7 @@
                 <form id="form-cadastro">
                     <div class="form-group">
                         <label>Nome completo</label>
-                        <input type="text" id="cad-nome" placeholder="seu nome"  required>
+                        <input type="text" id="cad-nome" placeholder="seu nome" required>
                     </div>
                     
                     <div class="form-group">
@@ -325,8 +394,8 @@
             <h1 class="mb-2"></h1>
             
             <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                <input type="text" id="busca" placeholder="Buscar por título, autor ou palavras-chave..." style="flex: 1; padding: 10px;">
-                <select id="filtro-curso" style="padding: 10px; min-width: 200px;">
+                <input type="text" id="busca" placeholder="Buscar por título, autor ou palavras-chave..." style="flex: 1; padding: 10px; border-radius: 15px;">
+                <select id="filtro-curso" style="padding: 10px; min-width: 200px; border-radius: 15px;">
                     <option value="">Todos os cursos</option>
                 </select>
             </div>
@@ -357,7 +426,7 @@
 
                     <div class="form-group">
                         <label>Ano de conclusão</label>
-                        <input type="number" id="ano" min="2000" max="2024" required>
+                        <input type="number" id="ano" min="2000" max="2026" required>
                     </div>
 
                     <div class="form-group">
@@ -383,45 +452,99 @@
         <!-- ===== SEÇÃO VISUALIZAR TCC ===== -->
         <section id="tcc-view" class="section">
             <span class="btn" onclick="voltarParaExplorar()">← Voltar</span>
-            <div id="tcc-detalhes" style="background: white; padding: 30px; margin-top: 20px;"></div>
+            <div id="tcc-detalhes" style="background: white; padding: 30px; margin-top: 20px; border-radius: 15px;"></div>
         </section>
     </div>
 
-
-<!-- ============= FOOTER ============!-->
-
-<footer class="text-center py-4 mt-5" style="background:#f8f9fa; color:#6c757d; font-size:13px; border-top:1px solid #dee2e6; border-radius:12px 12px 0 0;">
-  © 2026  TCC Hub
-<p>  </p>
-<a href="licenca.html" style="color:#0d6efd; text-decoration:none;">   </a>
-</footer>
-
-
-
+    <!-- ============= FOOTER ============ -->
+    <footer class="text-center py-4 mt-5" style="background:#f8f9fa; color:#6c757d; font-size:13px; border-top:1px solid #dee2e6; border-radius:12px 12px 0 0;">
+        © 2026 TCC Hub
+        <p></p>
+        <a href="licenca.html" style="color:#0d6efd; text-decoration:none;"></a>
+    </footer>
 
     <script>
+        // ===== CONFIGURAÇÕES =====
+        // SUBSTITUA PELO SEU CLIENT ID DO GOOGLE
+        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Obtenha em: https://console.cloud.google.com/apis/credentials
+
         // ===== BANCO DE DADOS LOCAL =====
         let tccs = [];
         let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
         let usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
         let tccsPendentes = JSON.parse(localStorage.getItem('tccs_pendentes') || '[]');
 
-        // ===== CARREGAR TCCS DO ARQUIVO JSON =====
+        // ===== CARREGAR TCCS DO ARQUIVO JSON (CORRIGIDO) =====
         fetch('data/tccs.json')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
+                console.log('✅ TCCs carregados:', data);
                 tccs = data.tccs || [];
                 atualizarTodasSecoes();
             })
-            .catch(() => {
+            .catch(error => {
+                console.error('❌ Erro ao carregar tccs.json:', error);
+                console.log('Usando dados locais como fallback');
                 tccs = [];
                 atualizarTodasSecoes();
             });
 
+        // ===== FUNÇÃO DE CALLBACK DO GOOGLE LOGIN =====
+        window.handleCredentialResponse = (response) => {
+            // Decodificar o token JWT do Google
+            const base64Url = response.credential.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const profile = JSON.parse(jsonPayload);
+            console.log('Google Profile:', profile);
+
+            // Verificar se usuário já existe
+            let usuario = usuarios.find(u => u.email === profile.email);
+            
+            if (!usuario) {
+                // Criar novo usuário com dados do Google
+                usuario = {
+                    id: Date.now(),
+                    nome: profile.name,
+                    email: profile.email,
+                    curso: 'Não informado',
+                    instituicao: 'Não informada',
+                    senha: 'google-auth-' + Date.now(), // Senha aleatória
+                    dataCadastro: new Date().toISOString(),
+                    tccs: [],
+                    googleId: profile.sub,
+                    picture: profile.picture,
+                    given_name: profile.given_name,
+                    family_name: profile.family_name
+                };
+                
+                usuarios.push(usuario);
+                localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            }
+
+            // Logar usuário
+            usuarioLogado = usuario;
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+            
+            atualizarMenu();
+            mostrarSecao('inicio');
+        };
+
         // ===== FUNÇÕES DE NAVEGAÇÃO =====
         function mostrarSecao(secao) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(secao).classList.add('active');
+            const secaoElement = document.getElementById(secao);
+            if (secaoElement) {
+                secaoElement.classList.add('active');
+            }
             
             // Atualizar links ativos
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -462,8 +585,11 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             
-            document.querySelector(`.tab[onclick*="${tab}"]`).classList.add('active');
-            document.getElementById(tab).classList.remove('hidden');
+            const tabElement = document.querySelector(`.tab[onclick*="${tab}"]`);
+            if (tabElement) tabElement.classList.add('active');
+            
+            const contentElement = document.getElementById(tab);
+            if (contentElement) contentElement.classList.remove('hidden');
         }
 
         // ===== FUNÇÕES DE AUTENTICAÇÃO =====
@@ -471,10 +597,11 @@
             const navLinks = document.getElementById('nav-links');
             
             if (usuarioLogado) {
+                const nomeExibicao = usuarioLogado.given_name || usuarioLogado.nome.split(' ')[0];
                 navLinks.innerHTML = `
                     <span class="nav-link" onclick="mostrarSecao('inicio')" data-secao="inicio">Início</span>
                     <span class="nav-link" onclick="mostrarSecao('explorar')" data-secao="explorar">Explorar</span>
-                    <span class="nav-link" onclick="mostrarSecao('perfil')" data-secao="perfil">${usuarioLogado.nome.split(' ')[0]}</span>
+                    <span class="nav-link" onclick="mostrarSecao('perfil')" data-secao="perfil">${nomeExibicao}</span>
                     <span class="nav-link" onclick="mostrarSecao('publicar')" data-secao="publicar">Publicar</span>
                     <span class="nav-link" onclick="logout()">Sair</span>
                 `;
@@ -486,7 +613,7 @@
             }
         }
 
-        // LOGIN
+        // LOGIN TRADICIONAL
         document.getElementById('form-login')?.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -505,7 +632,7 @@
             }
         });
 
-        // CADASTRO
+        // CADASTRO TRADICIONAL
         document.getElementById('form-cadastro')?.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -544,13 +671,21 @@
         function logout() {
             usuarioLogado = null;
             localStorage.removeItem('usuarioLogado');
+            
+            // Se tiver o Google Identity Services, fazer sign out
+            if (google && google.accounts) {
+                google.accounts.id.disableAutoSelect();
+            }
+            
             atualizarMenu();
             mostrarLogin();
         }
 
-        // ===== FUNÇÕES DOS TCCS =====
+        // ===== FUNÇÕES DOS TCCs (CORRIGIDAS) =====
         function carregarFeed() {
             const feed = document.getElementById('feed-cards');
+            if (!feed) return;
+            
             const recentes = [...tccs].reverse().slice(0, 6);
             
             if (recentes.length === 0) {
@@ -558,59 +693,83 @@
                 return;
             }
 
-            feed.innerHTML = recentes.map(tcc => `
-                <div class="card">
-                    <h3>${tcc.titulo || 'Sem título'}</h3>
-                    <p><strong>${tcc.autor || 'Autor'}</strong> • ${tcc.curso || 'Curso'}</p>
-                    <p>${(tcc.resumo || '').substring(0, 100)}...</p>
-                    <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
-                        <span>⭐ ${tcc.nota || '0.0'}</span>
-                        <span class="btn" style="padding: 5px 15px;" onclick="verTCC(${tcc.id})">Ler mais</span>
+            feed.innerHTML = recentes.map(tcc => {
+                // Garantir que todos os campos existam
+                const titulo = tcc.titulo || 'Sem título';
+                const autor = tcc.autor || 'Autor desconhecido';
+                const curso = tcc.curso || 'Curso não informado';
+                const resumo = tcc.resumo || 'Sem resumo disponível';
+                const nota = tcc.nota || '0.0';
+                
+                return `
+                    <div class="card">
+                        <h3>${titulo}</h3>
+                        <p><strong>${autor}</strong> • ${curso}</p>
+                        <p>${resumo.substring(0, 100)}${resumo.length > 100 ? '...' : ''}</p>
+                        <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>⭐ ${nota}</span>
+                            <span class="btn" style="padding: 5px 15px;" onclick="verTCC(${tcc.id})">Ler mais</span>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function carregarExplorar() {
             // Carregar cursos para o filtro
             const cursos = [...new Set(tccs.map(t => t.curso).filter(Boolean))];
             const select = document.getElementById('filtro-curso');
-            select.innerHTML = '<option value="">Todos os cursos</option>' + 
-                cursos.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (select) {
+                select.innerHTML = '<option value="">Todos os cursos</option>' + 
+                    cursos.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
 
             filtrarExplorar();
         }
 
         function filtrarExplorar() {
-            const busca = document.getElementById('busca').value.toLowerCase();
-            const curso = document.getElementById('filtro-curso').value;
+            const busca = document.getElementById('busca')?.value.toLowerCase() || '';
+            const curso = document.getElementById('filtro-curso')?.value || '';
 
-            const filtrados = tccs.filter(t => 
-                (t.titulo?.toLowerCase().includes(busca) || 
-                 t.autor?.toLowerCase().includes(busca) ||
-                 t.resumo?.toLowerCase().includes(busca) ||
-                 t.palavras_chave?.some(p => p.toLowerCase().includes(busca))) &&
-                (curso === '' || t.curso === curso)
-            );
+            const filtrados = tccs.filter(t => {
+                const matchBusca = busca === '' || 
+                    (t.titulo && t.titulo.toLowerCase().includes(busca)) ||
+                    (t.autor && t.autor.toLowerCase().includes(busca)) ||
+                    (t.resumo && t.resumo.toLowerCase().includes(busca)) ||
+                    (t.palavras_chave && t.palavras_chave.some(p => p && p.toLowerCase().includes(busca)));
+                
+                const matchCurso = curso === '' || t.curso === curso;
+                
+                return matchBusca && matchCurso;
+            });
 
             const container = document.getElementById('explorar-cards');
+            if (!container) return;
             
             if (filtrados.length === 0) {
                 container.innerHTML = '<p class="text-center">Nenhum TCC encontrado</p>';
                 return;
             }
 
-            container.innerHTML = filtrados.map(tcc => `
-                <div class="card">
-                    <h3>${tcc.titulo}</h3>
-                    <p><strong>${tcc.autor}</strong> • ${tcc.curso}</p>
-                    <p>${tcc.resumo.substring(0, 100)}...</p>
-                    <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
-                        <span>⭐ ${tcc.nota || '0.0'}</span>
-                        <span class="btn" style="padding: 5px 15px;" onclick="verTCC(${tcc.id})">Ler mais</span>
+            container.innerHTML = filtrados.map(tcc => {
+                const titulo = tcc.titulo || 'Sem título';
+                const autor = tcc.autor || 'Autor desconhecido';
+                const curso = tcc.curso || 'Curso não informado';
+                const resumo = tcc.resumo || 'Sem resumo disponível';
+                const nota = tcc.nota || '0.0';
+                
+                return `
+                    <div class="card">
+                        <h3>${titulo}</h3>
+                        <p><strong>${autor}</strong> • ${curso}</p>
+                        <p>${resumo.substring(0, 100)}${resumo.length > 100 ? '...' : ''}</p>
+                        <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>⭐ ${nota}</span>
+                            <span class="btn" style="padding: 5px 15px;" onclick="verTCC(${tcc.id})">Ler mais</span>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function verTCC(id) {
@@ -618,19 +777,19 @@
             if (!tcc) return;
 
             document.getElementById('tcc-detalhes').innerHTML = `
-                <h1>${tcc.titulo}</h1>
-                <p><strong>Autor:</strong> ${tcc.autor}</p>
-                <p><strong>Orientador:</strong> ${tcc.orientador}</p>
-                <p><strong>Curso:</strong> ${tcc.curso}</p>
-                <p><strong>Instituição:</strong> ${tcc.instituicao}</p>
-                <p><strong>Ano:</strong> ${tcc.ano}</p>
+                <h1>${tcc.titulo || 'Sem título'}</h1>
+                <p><strong>Autor:</strong> ${tcc.autor || 'Não informado'}</p>
+                <p><strong>Orientador:</strong> ${tcc.orientador || 'Não informado'}</p>
+                <p><strong>Curso:</strong> ${tcc.curso || 'Não informado'}</p>
+                <p><strong>Instituição:</strong> ${tcc.instituicao || 'Não informada'}</p>
+                <p><strong>Ano:</strong> ${tcc.ano || 'Não informado'}</p>
                 <hr style="margin: 20px 0;">
                 <h3>Resumo</h3>
-                <p>${tcc.resumo}</p>
+                <p>${tcc.resumo || 'Sem resumo disponível'}</p>
                 <hr style="margin: 20px 0;">
                 <h3>Palavras-chave</h3>
-                <p>${(tcc.palavras_chave || []).join(', ')}</p>
-                <a href="${tcc.pdf_url}" target="_blank" class="btn" style="margin-top: 20px;">📄 Ver PDF completo</a>
+                <p>${(tcc.palavras_chave || []).join(', ') || 'Nenhuma palavra-chave'}</p>
+                ${tcc.pdf_url ? `<a href="${tcc.pdf_url}" target="_blank" class="btn" style="margin-top: 20px;">📄 Ver PDF completo</a>` : ''}
             `;
 
             mostrarSecao('tcc-view');
@@ -640,15 +799,18 @@
             if (!usuarioLogado) return;
 
             const meusTCCs = tccs.filter(t => t.usuarioId === usuarioLogado.id);
+            const avatarImg = usuarioLogado.picture ? 
+                `<img src="${usuarioLogado.picture}" alt="${usuarioLogado.nome}">` : 
+                usuarioLogado.nome.charAt(0);
             
             document.getElementById('perfil').innerHTML = `
                 <div class="perfil-header">
-                    <div class="avatar">${usuarioLogado.nome.charAt(0)}</div>
+                    <div class="avatar">${avatarImg}</div>
                     <div>
                         <h2>${usuarioLogado.nome}</h2>
                         <p>${usuarioLogado.email}</p>
-                        <p>${usuarioLogado.curso} • ${usuarioLogado.instituicao}</p>
-                        <p>Membro desde ${new Date(usuarioLogado.dataCadastro).toLocaleDateString()}</p>
+                        <p>${usuarioLogado.curso || 'Curso não informado'} • ${usuarioLogado.instituicao || 'Instituição não informada'}</p>
+                        <p>Membro desde ${new Date(usuarioLogado.dataCadastro).toLocaleDateString('pt-BR')}</p>
                     </div>
                 </div>
 
@@ -661,18 +823,18 @@
                     <div class="card-grid">
                         ${meusTCCs.map(tcc => `
                             <div class="card">
-                                <h3>${tcc.titulo}</h3>
-                                <p>Publicado: ${new Date(tcc.data_publicacao).toLocaleDateString()}</p>
+                                <h3>${tcc.titulo || 'Sem título'}</h3>
+                                <p>Publicado: ${new Date(tcc.data_publicacao || tcc.data_envio).toLocaleDateString('pt-BR')}</p>
                                 <p>⭐ ${tcc.nota || 'Aguardando avaliação'}</p>
                                 <span class="btn" style="margin-top: 10px;" onclick="verTCC(${tcc.id})">Ver detalhes</span>
                             </div>
                         `).join('')}
-                        ${meusTCCs.length === 0 ? '<p>Você ainda não publicou nenhum TCC</p>' : ''}
+                        ${meusTCCs.length === 0 ? '<p style="grid-column: 1/-1; text-align: center;">Você ainda não publicou nenhum TCC</p>' : ''}
                     </div>
                 </div>
 
                 <div id="avaliacoes" class="tab-content hidden">
-                    <div style="background: white; padding: 20px; border: 1px solid var(--gray-300);">
+                    <div style="background: white; padding: 20px; border: 1px solid var(--gray-300); border-radius: 15px;">
                         <p class="text-center">Avaliações e comentários aparecerão aqui</p>
                     </div>
                 </div>
@@ -710,10 +872,14 @@
             localStorage.setItem('tccs_pendentes', JSON.stringify(tccsPendentes));
             
             // Vincular ao usuário
+            if (!usuarioLogado.tccs) usuarioLogado.tccs = [];
             usuarioLogado.tccs.push(tccData.id);
+            
             const usuarioIndex = usuarios.findIndex(u => u.id === usuarioLogado.id);
-            usuarios[usuarioIndex] = usuarioLogado;
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            if (usuarioIndex !== -1) {
+                usuarios[usuarioIndex] = usuarioLogado;
+                localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            }
             localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
             
             alert('Enviado para avaliação! Publicaremos em breve.');
@@ -728,10 +894,10 @@
         function atualizarTodasSecoes() {
             if (usuarioLogado) {
                 carregarFeed();
-                if (document.getElementById('explorar').classList.contains('active')) {
+                if (document.getElementById('explorar')?.classList.contains('active')) {
                     carregarExplorar();
                 }
-                if (document.getElementById('perfil').classList.contains('active')) {
+                if (document.getElementById('perfil')?.classList.contains('active')) {
                     carregarPerfil();
                 }
             }
@@ -745,6 +911,25 @@
         function inicializar() {
             atualizarMenu();
             
+            // Inicializar Google Login
+            if (google && google.accounts && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID') {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse
+                });
+                google.accounts.id.renderButton(
+                    document.querySelector('.g_id_signin'),
+                    { 
+                        theme: 'outline', 
+                        size: 'large',
+                        type: 'standard',
+                        text: 'signin_with',
+                        shape: 'rectangular',
+                        logo_alignment: 'left'
+                    }
+                );
+            }
+            
             // Se tiver usuário logado, vai pro feed, senão vai pro login
             if (usuarioLogado) {
                 mostrarSecao('inicio');
@@ -753,7 +938,17 @@
             }
         }
 
-        inicializar();
+        // Aguardar carregamento do Google Identity Services
+        window.onload = function() {
+            inicializar();
+        };
+
+        // Fallback se o Google não carregar
+        setTimeout(() => {
+            if (typeof google === 'undefined') {
+                console.warn('Google Identity Services não carregou. Login com Google indisponível.');
+            }
+        }, 3000);
     </script>
 </body>
 </html>
