@@ -1,0 +1,29 @@
+{
+  "name": "Repositório de TCC",
+  "short_name": "TCC Hub",
+  "description": "Repositório acadêmico de Trabalhos de Conclusão de Curso",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icons/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explorar TCCs",
+      "url": "/index.html?action=explore"
+    },
+    {
+      "name": "Meu Perfil",
+      "url": "/index.html?action=profile"
+    }
+  ],
+  "lang": "pt-BR"
+}
