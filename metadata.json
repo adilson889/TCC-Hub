@@ -23,5 +23,15 @@
     "commitPolicy": "conventional-commit-recommended",
     "requiresChangelogUpdate": true
   },
-  "releaseDate": "2026-03-27"
+  "releaseDate": "2026-03-27",
+  "repository": {
+    "tracksFullWebsiteSource": true,
+    "includes": [
+      "html",
+      "css",
+      "js",
+      "json",
+      "pwa"
+    ]
+  }
 }
