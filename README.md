@@ -16,31 +16,6 @@ Este repositório agora está preparado para manter **todos os arquivos do site*
 
 ---
 
-### Estrutura
-
-- `index.html`: entrada principal da aplicação.
-- `mobile.html`: fallback/redirect para clientes móveis.
-- `css/style.css`: estilos base.
-- `js/app.js`: lógica principal do frontend.
-- `data/tccs.json`: base de dados dos TCCs.
-- `sw.js`: Service Worker com cache e atualização.
-- `manifest.json`: metadados PWA.
-- `version.txt`: versão pública atual.
-- `metadata.json`: metadados de release e governança.
-- `package.json`: scripts utilitários de validação.
-
----
-
-### Fluxo recomendado de versionamento
-
-1. Atualizar `version.txt` quando houver release.
-2. Ajustar `APP_VERSION` em `sw.js` para a mesma versão.
-3. Ajustar `version` em `package.json` e `versioning.current` em `metadata.json`.
-4. Registrar mudanças no `CHANGELOG.md`.
-5. Executar `npm run validate` antes de publicar.
-
----
-
 ### Publicação (InfinityFree)
 
 1. Fazer commit das mudanças no Git.
