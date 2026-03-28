@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "usuarioId": null,
+  "titulo": "Título do TCC",
+  "autor": "Nome do Autor",
+  "orientador": "Nome do Orientador",
+  "curso": "Nome do Curso",
+  "instituicao": "Nome da Instituição",
+  "ano": "2025",
+  "resumo": "Resumo completo do trabalho...",
+  "palavras_chave": ["palavra1", "palavra2", "palavra3"],
+  "pdf_url": "https://link.do.pdf",
+  "visibilidade": "public",
+  "nota": 0,
+  "visualizacoes": 0,
+  "downloads": 0,
+  "avaliacoes": 0,
+  "data_publicacao": "2025-01-01T00:00:00Z"
+}
