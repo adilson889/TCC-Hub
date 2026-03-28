@@ -9,7 +9,10 @@ const urlsToCache = [
   '/index.html',
   '/mobile.html',
   '/manifest.json',
+  '/css/style.css',
+  '/js/app.js',
   '/data/tccs.json',
+  '/icons/icon.png',
   '/version.txt'
 ];
 
