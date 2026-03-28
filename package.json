@@ -9,7 +9,9 @@
     "validate": "npm run validate:version && npm run validate:json",
     "validate:version": "node ./scripts/check-version-sync.mjs",
     "validate:json": "node ./scripts/validate-json.mjs",
-    "prerelease": "npm run validate"
+    "prerelease": "npm run validate",
+    "sync:tccs": "node ./scripts/sync-tccs-from-google-sheet.mjs",
+    "sync:tccs:dry": "node ./scripts/sync-tccs-from-google-sheet.mjs --dry-run"
   },
   "keywords": [
     "tcc",

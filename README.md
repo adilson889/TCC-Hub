@@ -56,6 +56,36 @@ Esse fluxo garante que o histórico de mudanças fique auditável no Git mesmo q
 
 ---
 
+### Atualização automática do `data/tccs.json` (Google Form → Google Sheets)
+
+Para não editar JSON manualmente, use o script de sincronização:
+
+1. No Google Sheets (respostas do Form), publique/obtenha o CSV da planilha.
+2. Defina a variável `GOOGLE_SHEET_CSV_URL` com a URL CSV pública.
+3. Rode:
+
+```bash
+npm run sync:tccs
+```
+
+Isso atualiza `data/tccs.json` com `updatedAt` e `items` válidos.
+
+Para testar sem gravar arquivo:
+
+```bash
+npm run sync:tccs:dry
+```
+
+Também é possível testar com arquivo local:
+
+```bash
+node ./scripts/sync-tccs-from-google-sheet.mjs --from-file ./respostas.csv --dry-run
+```
+
+Campos mínimos esperados no cabeçalho: `titulo`, `autor`, `ano` (o script também aceita aliases comuns).
+
+---
+
 ### Publicação (InfinityFree)
 
 1. Fazer commit das mudanças no Git.
