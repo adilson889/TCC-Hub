@@ -1,5 +1,5 @@
 // Service Worker para TCC Hub PWA
-const CACHE_NAME = 'tcc-hub-v4';
+const CACHE_NAME = 'tcc-hub-v5';
 const APP_VERSION = '1.0.1';
 const CHECK_INTERVAL = 24 * 60 * 60 * 1000; // 24 horas em milissegundos
 
@@ -8,9 +8,11 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/mobile.html',
+  '/admin.html',
   '/manifest.json',
   '/css/style.css',
   '/js/app.js',
+  '/js/admin.js',
   '/data/tccs.json',
   '/icons/icon.png',
   '/version.txt'

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <title>TCC Hub • Administração</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/icons/icon.png" type="image/png" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>Painel de administração de TCCs</h1>
+      <p>Gerencie os itens e gere automaticamente o `data/tccs.json` sem editar JSON manualmente.</p>
+      <p><a href="/index.html">Voltar para o site</a></p>
+    </header>
+
+    <main class="container admin-layout">
+      <section class="card">
+        <h2>Novo / editar TCC</h2>
+        <form id="tcc-form" class="form-grid">
+          <label>Título<input name="titulo" required /></label>
+          <label>Autor<input name="autor" required /></label>
+          <label>Ano<input name="ano" type="number" min="1900" max="3000" required /></label>
+          <label>Curso<input name="curso" /></label>
+          <label>Instituição<input name="instituicao" /></label>
+          <label class="full">Resumo<textarea name="resumo" rows="3"></textarea></label>
+          <label class="full">Link<input name="link" type="url" placeholder="https://..." /></label>
+
+          <div class="actions full">
+            <button type="submit">Salvar item</button>
+            <button type="button" id="limpar-form">Limpar formulário</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Itens cadastrados</h2>
+        <p id="status-admin">Carregando itens...</p>
+        <ul id="admin-lista" class="admin-lista"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Exportação</h2>
+        <p>Quando terminar, gere o arquivo e substitua `data/tccs.json` no repositório/host.</p>
+        <div class="actions">
+          <button type="button" id="copiar-json">Copiar JSON</button>
+          <button type="button" id="baixar-json">Baixar tccs.json</button>
+        </div>
+        <textarea id="saida-json" rows="10" readonly></textarea>
+      </section>
+    </main>
+
+    <script src="/js/admin.js" type="module"></script>
+  </body>
+</html>

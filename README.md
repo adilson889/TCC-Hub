@@ -22,8 +22,10 @@ Este repositório está preparado para manter **todos os arquivos do site** (HTM
 
 - `index.html`: entrada principal da aplicação.
 - `mobile.html`: fallback/redirect para clientes móveis.
+- `admin.html`: painel para gerir TCCs e gerar JSON sem edição manual.
 - `css/style.css`: estilos base.
 - `js/app.js`: lógica principal do frontend.
+- `js/admin.js`: lógica do painel administrativo.
 - `data/tccs.json`: base de dados dos TCCs.
 - `sw.js`: Service Worker com cache e atualização.
 - `manifest.json`: metadados PWA.
@@ -98,6 +100,23 @@ node ./scripts/sync-tccs-from-google-sheet.mjs --from-file ./respostas.csv --dry
 ```
 
 Campos mínimos esperados no cabeçalho: `titulo`, `autor`, `ano`.
+
+---
+
+
+### Alternativa sem Google Sheets: `admin.html`
+
+Se você só tem o link do formulário e quer gerenciar manualmente em uma tela, use:
+
+- `https://repositorioaberto.xo.je/admin.html` (ou `/admin.html` no projeto local).
+
+No painel você consegue:
+
+1. Cadastrar, editar e excluir TCCs.
+2. Gerar JSON automaticamente no formato do projeto.
+3. Copiar ou baixar o arquivo `tccs.json`.
+
+Depois é só substituir `data/tccs.json` no repositório/host com o arquivo gerado.
 
 ---
 
