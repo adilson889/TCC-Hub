@@ -1,110 +1,110 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const DEFAULT_OUTPUT = 'data/tccs.json';
+const ARQUIVO_PADRAO = 'data/tccs.json';
 
-function getArg(flag) {
+function obterArg(flag) {
   const index = process.argv.indexOf(flag);
   if (index === -1) return null;
   return process.argv[index + 1] ?? null;
 }
 
-function hasFlag(flag) {
+function temFlag(flag) {
   return process.argv.includes(flag);
 }
 
-function parseCsv(csv) {
-  const rows = [];
-  let row = [];
-  let cell = '';
-  let inQuotes = false;
+function parsearCsv(csv) {
+  const linhas = [];
+  let linha = [];
+  let celula = '';
+  let entreAspas = false;
 
   for (let i = 0; i < csv.length; i += 1) {
     const char = csv[i];
     const next = csv[i + 1];
 
     if (char === '"') {
-      if (inQuotes && next === '"') {
-        cell += '"';
+      if (entreAspas && next === '"') {
+        celula += '"';
         i += 1;
       } else {
-        inQuotes = !inQuotes;
+        entreAspas = !entreAspas;
       }
       continue;
     }
 
-    if (char === ',' && !inQuotes) {
-      row.push(cell);
-      cell = '';
+    if (char === ',' && !entreAspas) {
+      linha.push(celula);
+      celula = '';
       continue;
     }
 
-    if ((char === '\n' || char === '\r') && !inQuotes) {
+    if ((char === '\n' || char === '\r') && !entreAspas) {
       if (char === '\r' && next === '\n') i += 1;
-      row.push(cell);
-      cell = '';
-      if (row.some((value) => value.trim() !== '')) {
-        rows.push(row);
+      linha.push(celula);
+      celula = '';
+      if (linha.some((valor) => valor.trim() !== '')) {
+        linhas.push(linha);
       }
-      row = [];
+      linha = [];
       continue;
     }
 
-    cell += char;
+    celula += char;
   }
 
-  if (cell.length > 0 || row.length > 0) {
-    row.push(cell);
-    if (row.some((value) => value.trim() !== '')) {
-      rows.push(row);
+  if (celula.length > 0 || linha.length > 0) {
+    linha.push(celula);
+    if (linha.some((valor) => valor.trim() !== '')) {
+      linhas.push(linha);
     }
   }
 
-  return rows;
+  return linhas;
 }
 
-function normalizeHeader(value) {
-  return String(value || '')
+function normalizarCabecalho(valor) {
+  return String(valor || '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .trim();
 }
 
-function pickValue(record, aliases) {
+function escolherValor(registro, aliases) {
   for (const alias of aliases) {
-    if (record[alias]) return record[alias].trim();
+    if (registro[alias]) return registro[alias].trim();
   }
   return '';
 }
 
-function normalizeYear(value) {
-  const year = Number.parseInt(String(value || '').trim(), 10);
-  if (!Number.isInteger(year) || year < 1900 || year > 3000) return null;
-  return year;
+function normalizarAno(valor) {
+  const ano = Number.parseInt(String(valor || '').trim(), 10);
+  if (!Number.isInteger(ano) || ano < 1900 || ano > 3000) return null;
+  return ano;
 }
 
-function toRecord(headers, row) {
-  const record = {};
-  headers.forEach((header, idx) => {
-    record[header] = String(row[idx] ?? '').trim();
+function paraRegistro(cabecalhos, linha) {
+  const registro = {};
+  cabecalhos.forEach((cabecalho, idx) => {
+    registro[cabecalho] = String(linha[idx] ?? '').trim();
   });
-  return record;
+  return registro;
 }
 
-function mapToItem(record, index) {
-  const titulo = pickValue(record, ['titulo', 'titulo do tcc', 'tema', 'title']);
-  const autor = pickValue(record, ['autor', 'autor(a)', 'nome', 'aluno', 'nome completo']);
-  const ano = normalizeYear(pickValue(record, ['ano', 'ano de defesa', 'year']));
+function mapearParaItem(registro, index) {
+  const titulo = escolherValor(registro, ['titulo', 'titulo do tcc', 'tema']);
+  const autor = escolherValor(registro, ['autor', 'autor(a)', 'nome', 'aluno', 'nome completo']);
+  const ano = normalizarAno(escolherValor(registro, ['ano', 'ano de defesa']));
 
   if (!titulo || !autor || !ano) {
     return null;
   }
 
-  const curso = pickValue(record, ['curso']);
-  const instituicao = pickValue(record, ['instituicao', 'instituição']);
-  const resumo = pickValue(record, ['resumo', 'descricao', 'descrição']);
-  const link = pickValue(record, ['link', 'link pdf', 'pdf', 'url']);
+  const curso = escolherValor(registro, ['curso']);
+  const instituicao = escolherValor(registro, ['instituicao', 'instituição']);
+  const resumo = escolherValor(registro, ['resumo', 'descricao', 'descrição']);
+  const link = escolherValor(registro, ['link', 'link pdf', 'pdf']);
 
   return {
     id: `tcc-${index + 1}`,
@@ -118,57 +118,68 @@ function mapToItem(record, index) {
   };
 }
 
-async function loadCsv() {
-  const fromFile = getArg('--from-file');
-  if (fromFile) {
-    const filePath = resolve(process.cwd(), fromFile);
-    return readFile(filePath, 'utf8');
+function montarUrlCsvPorIdDaPlanilha() {
+  const idPlanilha = process.env.PLANILHA_ID_GOOGLE;
+  if (!idPlanilha) return null;
+
+  const gid = process.env.PLANILHA_ABA_GID || '0';
+  return `https://docs.google.com/spreadsheets/d/${idPlanilha}/gviz/tq?tqx=out:csv&gid=${gid}`;
+}
+
+async function carregarCsv() {
+  const deArquivo = obterArg('--from-file');
+  if (deArquivo) {
+    const caminho = resolve(process.cwd(), deArquivo);
+    return readFile(caminho, 'utf8');
   }
 
-  const url = process.env.GOOGLE_SHEET_CSV_URL;
+  const urlDireta = process.env.URL_CSV_PLANILHA || process.env.GOOGLE_SHEET_CSV_URL;
+  const urlPorId = montarUrlCsvPorIdDaPlanilha();
+  const url = urlDireta || urlPorId;
+
   if (!url) {
-    throw new Error('Defina GOOGLE_SHEET_CSV_URL ou use --from-file <arquivo.csv>.');
+    throw new Error('Defina URL_CSV_PLANILHA ou PLANILHA_ID_GOOGLE (opcionalmente PLANILHA_ABA_GID).');
   }
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Falha ao baixar CSV: HTTP ${response.status}`);
+  const resposta = await fetch(url);
+  if (!resposta.ok) {
+    throw new Error(`Falha ao baixar CSV: HTTP ${resposta.status}`);
   }
 
-  return response.text();
+  return resposta.text();
 }
 
 async function main() {
-  const csv = await loadCsv();
-  const rows = parseCsv(csv);
+  const csv = await carregarCsv();
+  const linhas = parsearCsv(csv);
 
-  if (rows.length < 2) {
+  if (linhas.length < 2) {
     throw new Error('CSV sem dados suficientes (é necessário cabeçalho + ao menos 1 linha).');
   }
 
-  const headers = rows[0].map(normalizeHeader);
-  const items = rows
+  const cabecalhos = linhas[0].map(normalizarCabecalho);
+  const items = linhas
     .slice(1)
-    .map((row) => toRecord(headers, row))
-    .map((record, idx) => mapToItem(record, idx))
+    .map((linha) => paraRegistro(cabecalhos, linha))
+    .map((registro, idx) => mapearParaItem(registro, idx))
     .filter(Boolean);
 
   const payload = {
     updatedAt: new Date().toISOString().slice(0, 10),
-    source: hasFlag('--from-file') ? 'csv:file' : 'google-sheets:csv',
+    fonte: temFlag('--from-file') ? 'arquivo-csv' : 'planilha-google-csv',
     items
   };
 
-  const outputPath = resolve(process.cwd(), process.env.TCC_OUTPUT_PATH || DEFAULT_OUTPUT);
+  const caminhoSaida = resolve(process.cwd(), process.env.CAMINHO_SAIDA_TCC || ARQUIVO_PADRAO);
 
-  if (hasFlag('--dry-run')) {
+  if (temFlag('--dry-run')) {
     console.log(JSON.stringify(payload, null, 2));
     console.log(`\nItens válidos encontrados: ${items.length}`);
     return;
   }
 
-  await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-  console.log(`Arquivo atualizado: ${outputPath}`);
+  await writeFile(caminhoSaida, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  console.log(`Arquivo atualizado: ${caminhoSaida}`);
   console.log(`Itens válidos salvos: ${items.length}`);
 }
 

@@ -58,17 +58,32 @@ Esse fluxo garante que o histórico de mudanças fique auditável no Git mesmo q
 
 ### Atualização automática do `data/tccs.json` (Google Form → Google Sheets)
 
-Para não editar JSON manualmente, use o script de sincronização:
+Para não editar JSON manualmente, use o script de sincronização.
 
-1. No Google Sheets (respostas do Form), publique/obtenha o CSV da planilha.
-2. Defina a variável `GOOGLE_SHEET_CSV_URL` com a URL CSV pública.
-3. Rode:
+Se você não encontra “link CSV” no painel de respostas, use o **ID da planilha**:
+
+1. Abra a planilha de respostas do Google Form.
+2. Copie o ID da URL da planilha (trecho entre `/d/` e `/edit`).
+3. No terminal, defina:
+
+```bash
+export PLANILHA_ID_GOOGLE='COLE_O_ID_AQUI'
+# opcional, se a aba não for a primeira:
+export PLANILHA_ABA_GID='0'
+```
+
+4. Rode:
 
 ```bash
 npm run sync:tccs
 ```
 
-Isso atualiza `data/tccs.json` com `updatedAt` e `items` válidos.
+Também funciona com URL CSV direta (quando disponível):
+
+```bash
+export URL_CSV_PLANILHA='URL_CSV_AQUI'
+npm run sync:tccs
+```
 
 Para testar sem gravar arquivo:
 
@@ -76,13 +91,13 @@ Para testar sem gravar arquivo:
 npm run sync:tccs:dry
 ```
 
-Também é possível testar com arquivo local:
+Teste local com arquivo CSV:
 
 ```bash
 node ./scripts/sync-tccs-from-google-sheet.mjs --from-file ./respostas.csv --dry-run
 ```
 
-Campos mínimos esperados no cabeçalho: `titulo`, `autor`, `ano` (o script também aceita aliases comuns).
+Campos mínimos esperados no cabeçalho: `titulo`, `autor`, `ano`.
 
 ---
 
