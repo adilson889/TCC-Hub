@@ -1,0 +1,23 @@
+{
+  "name": "tcc-hub",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Base de versionamento e metadados do Repositório Aberto de TCC",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "validate": "npm run validate:version && npm run validate:json",
+    "validate:version": "node ./scripts/check-version-sync.mjs",
+    "validate:json": "node ./scripts/validate-json.mjs",
+    "prerelease": "npm run validate"
+  },
+  "keywords": [
+    "tcc",
+    "pwa",
+    "repositorio",
+    "versionamento"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

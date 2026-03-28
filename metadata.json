@@ -1,0 +1,37 @@
+{
+  "project": {
+    "name": "TCC Hub",
+    "slug": "tcc-hub",
+    "repositoryVisibility": "public",
+    "primaryLanguage": "pt-BR"
+  },
+  "deployment": {
+    "provider": "InfinityFree",
+    "publicUrl": "https://repositorioaberto.xo.je",
+    "mode": "static-hosting"
+  },
+  "versioning": {
+    "current": "1.0.1",
+    "sourceOfTruth": "version.txt",
+    "syncTargets": [
+      "sw.js:APP_VERSION",
+      "package.json:version"
+    ]
+  },
+  "governance": {
+    "releaseCadence": "on-demand",
+    "commitPolicy": "conventional-commit-recommended",
+    "requiresChangelogUpdate": true
+  },
+  "releaseDate": "2026-03-27",
+  "repository": {
+    "tracksFullWebsiteSource": true,
+    "includes": [
+      "html",
+      "css",
+      "js",
+      "json",
+      "pwa"
+    ]
+  }
+}
