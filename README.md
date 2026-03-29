@@ -120,6 +120,22 @@ Depois é só substituir `data/tccs.json` no repositório/host com o arquivo ger
 
 ---
 
+### Como atualizar tudo (passo a passo rápido)
+
+1. Abra `/admin.html` e atualize os TCCs.
+2. Clique em **Baixar tccs.json**.
+3. Substitua o arquivo `data/tccs.json` no projeto local pelo arquivo baixado.
+4. Rode validação:
+
+```bash
+npm run validate
+```
+
+5. Faça commit das alterações no Git.
+6. Envie para o InfinityFree os arquivos alterados (`data/tccs.json`, HTML/CSS/JS quando houver mudança).
+7. No navegador, faça atualização forçada (Ctrl+F5) para garantir atualização de cache.
+8. Se ainda aparecer conteúdo antigo, feche e abra novamente o site para o Service Worker buscar a versão atual.
+
 ### Publicação (InfinityFree)
 
 1. Fazer commit das mudanças no Git.
