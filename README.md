@@ -120,6 +120,24 @@ Depois é só substituir `data/tccs.json` no repositório/host com o arquivo ger
 
 ---
 
+### Fluxo de acesso (login obrigatório)
+
+A aplicação agora exige login inicial no `index.html` para abrir o conteúdo.
+
+- Sem sessão válida, só a tela de login é exibida.
+- Após login, o perfil é carregado e os TCCs ficam disponíveis.
+- O `admin.html` também exige sessão ativa e redireciona para `index.html` se não houver login.
+
+Para testar local antes de publicar:
+
+```bash
+python -m http.server 8080
+```
+
+Depois abra `http://localhost:8080/index.html`.
+
+---
+
 ### Se o `admin.html` não aparecer no site
 
 Isso normalmente acontece por **publicação incompleta** ou **cache antigo**.

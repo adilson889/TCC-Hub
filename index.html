@@ -10,23 +10,54 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <header class="container">
-      <h1>TCC Hub</h1>
-      <p>Repositório aberto de Trabalhos de Conclusão de Curso.</p>
-      <p><a href="/admin.html">Abrir painel de administração</a></p>
-    </header>
-
     <main class="container">
-      <section aria-labelledby="tcc-heading">
-        <h2 id="tcc-heading">TCCs publicados</h2>
-        <ul id="tcc-list" aria-live="polite" aria-busy="true">
-          <li>Carregando TCCs...</li>
-        </ul>
+      <section id="tela-login" class="painel-auth" aria-labelledby="titulo-login">
+        <div class="card card-auth">
+          <h1 id="titulo-login">Entrar no TCC Hub</h1>
+          <p>Faça login para carregar seu perfil e aceder aos dados.</p>
+
+          <form id="form-login" class="form-grid" autocomplete="on">
+            <label>
+              E-mail
+              <input id="login-email" name="email" type="email" required autocomplete="email" />
+            </label>
+
+            <label>
+              Palavra-passe
+              <input id="login-password" name="password" type="password" minlength="6" required autocomplete="current-password" />
+            </label>
+
+            <button type="submit" class="botao-primario">Entrar</button>
+          </form>
+
+          <p id="login-status" class="status-text" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="tela-app" class="hidden" aria-labelledby="titulo-app">
+        <header class="card topo-app">
+          <div>
+            <h2 id="titulo-app">TCC Hub</h2>
+            <p id="perfil-usuario">Perfil não carregado.</p>
+          </div>
+
+          <nav class="actions">
+            <a href="/admin.html" class="botao-link">Admin</a>
+            <button id="btn-sair" type="button">Sair</button>
+          </nav>
+        </header>
+
+        <section class="card">
+          <h3>TCCs publicados</h3>
+          <ul id="tcc-list" aria-live="polite" aria-busy="true">
+            <li>Carregando TCCs...</li>
+          </ul>
+        </section>
       </section>
     </main>
 
     <noscript>
-      <p class="container">Ative o JavaScript para carregar a lista de TCCs.</p>
+      <p class="container">Ative o JavaScript para utilizar a aplicação.</p>
     </noscript>
 
     <script src="/js/app.js" type="module"></script>

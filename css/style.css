@@ -1,12 +1,26 @@
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --bg: #000000;
+  --surface: #0f0f0f;
+  --surface-2: #161616;
+  --text: #ffffff;
+  --text-soft: #cfcfcf;
+  --border: #2c2c2c;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #f6f8fb;
-  color: #121826;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.hidden {
+  display: none !important;
 }
 
 .container {
@@ -16,55 +30,88 @@ body {
 }
 
 h1,
-h2 {
-  margin-bottom: 0.5rem;
-}
-
-#tcc-list {
-  padding-left: 1rem;
+h2,
+h3,
+p {
+  margin-top: 0;
 }
 
 .card {
-  background: #ffffff;
-  border: 1px solid #dbe2f0;
-  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
-.admin-layout {
+.painel-auth {
+  min-height: calc(100vh - 2rem);
   display: grid;
-  gap: 1rem;
+  place-items: center;
+}
+
+.card-auth {
+  width: min(100%, 420px);
+  padding: 1.5rem;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .form-grid label {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.4rem;
+  color: var(--text-soft);
   font-size: 0.95rem;
-}
-
-.form-grid .full {
-  grid-column: 1 / -1;
 }
 
 input,
 textarea,
-button {
+button,
+.botao-link {
   font: inherit;
 }
 
 input,
 textarea {
-  border: 1px solid #c7d2e5;
-  border-radius: 8px;
-  padding: 0.55rem 0.65rem;
-  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+button,
+.botao-link {
+  border: 1px solid #ffffff;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover,
+.botao-link:hover {
+  opacity: 0.9;
+}
+
+.status-text {
+  min-height: 1.2rem;
+  color: var(--text-soft);
+}
+
+.topo-app {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .actions {
@@ -73,17 +120,13 @@ textarea {
   gap: 0.5rem;
 }
 
-button {
-  border: 1px solid #113366;
-  background: #17407a;
-  color: #fff;
-  border-radius: 8px;
-  padding: 0.5rem 0.8rem;
-  cursor: pointer;
+#tcc-list {
+  padding-left: 1rem;
 }
 
-button:hover {
-  filter: brightness(1.1);
+.admin-layout {
+  display: grid;
+  gap: 1rem;
 }
 
 .admin-lista {
@@ -95,10 +138,10 @@ button:hover {
 }
 
 .admin-lista li {
-  border: 1px solid #dbe2f0;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.75rem;
-  background: #f9fbff;
+  background: var(--surface-2);
 }
 
 .admin-lista p {
@@ -107,5 +150,4 @@ button:hover {
 
 #saida-json {
   width: 100%;
-  box-sizing: border-box;
 }

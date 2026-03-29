@@ -1,3 +1,4 @@
+const CHAVE_SESSAO = 'tcc_hub_sessao_usuario_v1';
 const CHAVE_LOCAL = 'tcc_hub_admin_items_v1';
 
 const form = document.getElementById('tcc-form');
@@ -10,6 +11,17 @@ const botaoBaixar = document.getElementById('baixar-json');
 
 let items = [];
 let indiceEdicao = null;
+
+function sessaoValida() {
+  try {
+    const raw = localStorage.getItem(CHAVE_SESSAO);
+    if (!raw) return false;
+    const sessao = JSON.parse(raw);
+    return Boolean(sessao?.email);
+  } catch {
+    return false;
+  }
+}
 
 function normalizarTexto(valor) {
   return String(valor || '').trim();
@@ -195,6 +207,11 @@ botaoCopiar.addEventListener('click', copiarJson);
 botaoBaixar.addEventListener('click', baixarArquivoJson);
 
 async function iniciar() {
+  if (!sessaoValida()) {
+    window.location.href = '/index.html';
+    return;
+  }
+
   const local = carregarLocalStorage();
 
   if (local.length > 0) {
