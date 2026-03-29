@@ -11,7 +11,8 @@
     "validate:json": "node ./scripts/validate-json.mjs",
     "prerelease": "npm run validate",
     "sync:tccs": "node ./scripts/sync-tccs-from-google-sheet.mjs",
-    "sync:tccs:dry": "node ./scripts/sync-tccs-from-google-sheet.mjs --dry-run"
+    "sync:tccs:dry": "node ./scripts/sync-tccs-from-google-sheet.mjs --dry-run",
+    "publicacao:check": "node ./scripts/verificar-pacote-publicacao.mjs"
   },
   "keywords": [
     "tcc",

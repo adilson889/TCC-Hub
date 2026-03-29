@@ -120,6 +120,31 @@ Depois é só substituir `data/tccs.json` no repositório/host com o arquivo ger
 
 ---
 
+### Se o `admin.html` não aparecer no site
+
+Isso normalmente acontece por **publicação incompleta** ou **cache antigo**.
+
+Checklist rápido:
+
+1. Rodar localmente:
+
+```bash
+npm run publicacao:check
+```
+
+2. Confirmar upload no InfinityFree dos arquivos abaixo (mínimo):
+   - `admin.html`
+   - `js/admin.js`
+   - `css/style.css`
+   - `sw.js`
+   - `version.txt`
+3. Depois do upload, abrir o site e fazer atualização forçada (`Ctrl+F5`).
+4. Se ainda não aparecer, fechar todas as abas do site e abrir novamente.
+
+A lista completa de publicação é gerada em `.deploy/arquivos-publicacao.txt`.
+
+---
+
 ### Como atualizar tudo (passo a passo rápido)
 
 1. Abra `/admin.html` e atualize os TCCs.
